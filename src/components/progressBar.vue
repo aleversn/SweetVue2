@@ -43,7 +43,7 @@ export default {
     },
     watch: {
         percent: function(){
-            this.$emit('progressChange',this.percent);  //@event progressChange//
+            this.$emit('progresschange',this.percent);  //@event progressChange//
         }
     }
 }

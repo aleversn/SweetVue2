@@ -7,7 +7,6 @@
     <title>SweetVueDevCenter</title>
     <script type="text/javascript" src="./dist/SweetVue.min.js"></script>
     <script type="text/javascript" src="./src/js/vue.min.js"></script>
-    <script type="text/javascript" src="./src/js/jquery-3.2.1.min.js"></script>
 </head>
 
 <body>
@@ -51,7 +50,29 @@
     new Vue({
         el:"#app",
         mounted () {
-            
+            this.getUrlImg('./1.jpg');
+        },
+        methods: {
+            getUrlImg (url) {
+                let xhr = new XMLHttpRequest();
+                xhr.open("get",url,true);
+                xhr.responseType = "blob";
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        let blob = xhr.response;
+                        let FR = new FileReader();
+                        FR.onload = (event) => {
+                            let base64 = event.target.result;
+                            console.log(base64);
+                        }
+                        FR.readAsDataURL(blob);
+                    }
+                    else if (xhr.readyState == 4) {
+                        
+                    }
+                }
+                xhr.send();
+            }
         }
     });
 </script>

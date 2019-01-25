@@ -48,7 +48,7 @@ export default {
             let nowStatus = this.isDropDown[index];
             Vue.set(this.isDropDown,index,!nowStatus);  //我们可以动态控制数据的增减，但是我们却无法做到对某一条数据的修改//用Vue.set解决此问题//
             
-            this.$emit('itemClick',this.objs[index].value); //@event itemClick//
+            this.$emit('itemclick',this.objs[index].value); //@event itemClick//
             
             this.ClearChoose(this.rootObjs);
             let t = this.objs[index];

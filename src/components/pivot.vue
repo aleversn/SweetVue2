@@ -95,7 +95,7 @@ export default {
         },
         Func: function(val,index){
             let el = this;
-            this.$emit('switchOption',{val:val,index:index});   //@event switchOption//
+            this.$emit('switchoption',{val:val,index:index});   //@event switchOption//
             if($(el.$el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}('${val}',${index})`);
         }

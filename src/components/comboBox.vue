@@ -57,7 +57,7 @@ export default {
             },200,function(){
                 el.status=!el.status;
             });
-            this.$emit('chooseItem',{value:this.value,currentIndex:this.currentIndex}); //@event chooseItem//
+            this.$emit('chooseitem',{value:this.value,currentIndex:this.currentIndex}); //@event chooseItem//
             if($(el.$el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}('${this.value}',${this.currentIndex})`);
         },
