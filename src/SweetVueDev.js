@@ -4,6 +4,20 @@ import './css/sweet.css';
 import checkBox from './components/checkBox.vue';
 import searchBox from './components/searchBox.vue';
 import comboBox from './components/comboBox.vue';
+import progressRing from './components/progressRing.vue';
+import progressBar from './components/progressBar.vue';
+import flipView from './components/flipView.vue';
+import scrollSticky from './components/scrollSticky.vue';
+import toggleSwitch from './components/toggleSwitch.vue';
+import treeView from './components/treeView.vue';
+import calendarView from './components/calendarView.vue';
+import calendarDatePicker from './components/calendarDatePicker.vue';
+import datePicker from './components/datePicker.vue';
+import timePicker from './components/timePicker.vue';
+import parallaxView from './components/parallaxView.vue';
+import scrollReveal from './components/scrollReveal.vue';
+import flyOut from './components/flyOut.vue';
+import pivot from './components/pivot.vue';
 
 
 let SweetVue = {};
@@ -13,6 +27,20 @@ SweetVue.install = function(Vue, options) {
     Vue.component(checkBox.name,checkBox);
     Vue.component(searchBox.name,searchBox);
     Vue.component(comboBox.name,comboBox);
+    Vue.component(progressRing.name,progressRing);
+    Vue.component(progressBar.name,progressBar);
+    Vue.component(flipView.name,flipView);
+    Vue.component(scrollSticky.name,scrollSticky);
+    Vue.component(toggleSwitch.name,toggleSwitch);
+    Vue.component(treeView.name,treeView);
+    Vue.component(calendarView.name,calendarView);
+    Vue.component(calendarDatePicker.name,calendarDatePicker);
+    Vue.component(datePicker.name,datePicker);
+    Vue.component(timePicker.name,timePicker);
+    Vue.component(parallaxView.name,parallaxView);
+    Vue.component(scrollReveal.name,scrollReveal);
+    Vue.component(flyOut.name,flyOut);
+    Vue.component(pivot.name,pivot);
 }
 
 
