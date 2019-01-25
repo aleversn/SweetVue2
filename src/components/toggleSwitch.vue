@@ -94,8 +94,7 @@ export default {
     watch: {
         active: function(){
             let el = this.$el;
-            if($(el).attr("xFunc")!=undefined)
-                eval(`${$(el).attr("xFunc")}(${this.active})`);
+            this.$emit('click',this.active);    //@event click//
             if($(el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el).attr("pFunc")}(${this.active})`);
             this.updateStatus();

@@ -39,43 +39,6 @@ export default {
             this.items = titems;
             this.now = titems[0].name;
         }
-        else if($(el).attr("xJson")!=undefined) //以Json形式赋值//
-        {
-            this.items = eval(`${$(el).attr("xJson")}`);
-            this.updateItems();
-        }
-        else if($(el).attr("xData")!=undefined)
-        {
-            let uri = $(el).attr("xData");
-            if(uri.indexOf('/')>=0)
-            {
-                Sweet.AjaxGetAsync(uri,function(data){
-                    if(data!=null&&data.length>0)
-                        target.items = data;
-                },true);
-            }
-            else
-            {
-                this.items = eval(`${uri}.xData`);
-                Object.defineProperty(eval(`${uri}`),'xData',{  //设立xData监听//
-                    get: function(){
-                        return xData;
-                    },
-                    set: function(value){
-                        xData = value;
-                        target.items = eval(`${uri}.xData`);
-                        target.updateItems();
-                        target.now = target.items[0].name;
-                        target.value = target.items[0].value;
-                    }
-                });
-                this.updateItems();
-            }
-        }
-        if($(el).attr("xNow")!=undefined)
-        {
-            this.now = $(el).attr("xNow");
-        }
     },
     methods:{
         isSelected: function(e){
@@ -94,9 +57,7 @@ export default {
             },200,function(){
                 el.status=!el.status;
             });
-            //xFunc//
-            if($(el.$el).attr("xFunc")!=undefined)
-                eval(`${$(el.$el).attr("xFunc")}('${this.value}',${this.currentIndex})`);
+            this.$emit('chooseItem',{value:this.value,currentIndex:this.currentIndex}); //@event chooseItem//
             if($(el.$el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}('${this.value}',${this.currentIndex})`);
         },

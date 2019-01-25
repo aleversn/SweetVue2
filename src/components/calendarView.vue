@@ -202,6 +202,7 @@ export default {
             let reg = /\d+/g;
             let timeArray = new Array();
             let d = new Date();
+            let x;
             while((x = reg.exec(str))!= null)
             {
                 timeArray.push(x[0]);

@@ -1423,7 +1423,7 @@
                     this.init();
                 },
                 clickMinute: function(index){
-                    this.day.minute = this.Mode(this.minuteRange.s + index,60);
+                    this.time.minute = this.Mode(this.minuteRange.s + index,60);
                     this.init();
                 },
                 Mode: function(num,mod){    //标准模运算

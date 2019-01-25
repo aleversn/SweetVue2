@@ -16,7 +16,7 @@ import datePicker from './components/datePicker.vue';
 import timePicker from './components/timePicker.vue';
 import parallaxView from './components/parallaxView.vue';
 import scrollReveal from './components/scrollReveal.vue';
-import flyOut from './components/flyOut.vue';
+import flyout from './components/flyout.vue';
 import pivot from './components/pivot.vue';
 
 
@@ -39,7 +39,7 @@ SweetVue.install = function(Vue, options) {
     Vue.component(timePicker.name,timePicker);
     Vue.component(parallaxView.name,parallaxView);
     Vue.component(scrollReveal.name,scrollReveal);
-    Vue.component(flyOut.name,flyOut);
+    Vue.component(flyout.name,flyout);
     Vue.component(pivot.name,pivot);
 }
 

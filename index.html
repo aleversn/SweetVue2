@@ -7,18 +7,51 @@
     <title>SweetVueDevCenter</title>
     <script type="text/javascript" src="./dist/SweetVue.min.js"></script>
     <script type="text/javascript" src="./src/js/vue.min.js"></script>
+    <script type="text/javascript" src="./src/js/jquery-3.2.1.min.js"></script>
 </head>
 
 <body>
 <div id="app">
-    <checkbox></checkbox>
+    <checkbox xContent="CheckBox"></checkbox>
+    <scroll-sticky>
+        <button class="sbutton">ScrollSticky</button>
+    </scroll-sticky>
+    <combobox>
+        <p>a</p>
+        <p>b</p>
+        <p>c</p>
+    </combobox>
+    <progress-ring></progress-ring>
+    <progress-bar xColor="pink" :percent="50"></progress-bar>
+    <searchbox xIconColor="rgba(0,153,204,1)"></searchbox>
+    <toggle-switch xOnContent="Open" xOffContent="Close" xIsOn="true"></toggle-switch>
+    <flipview style="height: 500px;">
+        <div style="background: rgba(242,242,242,1);"></div>
+        <div style="background: red;"></div>
+        <!-- <div style="background: green;"></div> -->
+    </flipview>
+
+	<flyout>
+        <p slot="flyout">Flyout</p>
+        <button slot="target" class="sbutton">Sample</button>
+    </flyout>
+    <pivot>
+        <option>All</option>
+        <option>P1</option>
+        <option>P2</option>
+    </pivot>
+    <div style="height:600px;">
+        <calendar-date-picker></calendar-date-picker>
+        <date-picker></date-picker>
+        <time-picker></time-picker>
+    </div>
 </div>
 <script>
     Vue.use(SweetVue);
     new Vue({
         el:"#app",
         mounted () {
-            this.$Sweet.barWarning(0,'');
+            
         }
     });
 </script>

@@ -60,17 +60,8 @@ export default {
             $(this.$refs.input).attr("placeholder",$(el).attr("placeholder"));
         if($(el).attr("readonly")=="readonly")
             $(this.$refs.input).attr("readonly","readonly");
-        if($(el).attr("xChange")!=null)
-            $(this.$refs.input).keyup(function(){eval(`${$(el).attr("xChange")}("${$(target.$refs.input).val()}")`)});
         if($(el).attr("pChange")!=null)
             $(this.$refs.input).keyup(function(){eval(`target.$parent.${$(el).attr("pChange")}("${$(target.$refs.input).val()}")`)});
-        if($(el).attr("xIconClick")!=null){
-            $(this.$refs.input).keyup((e)=>{
-                if(e.keyCode==13)
-                    eval(`target.$parent.${$(el).attr("pIconClick")}("${$(target.$refs.input).val()}")`);
-            });
-            $(this.$refs.icon).click(function(){eval(`${$(el).attr("xIconClick")}("${$(target.$refs.input).val()}")`)});
-        }
         if($(el).attr("pIconClick")!=null){
             $(this.$refs.input).keyup((e)=>{
                 if(e.keyCode==13)

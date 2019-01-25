@@ -17,7 +17,7 @@ import $ from '../js/jquery-3.2.1.min.js';
 import '../css/sweet.css';
 
 export default {
-    name: 'fly-out',
+    name: 'flyout',
     data: function(){
         return {
             show:false,

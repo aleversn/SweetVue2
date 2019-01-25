@@ -11,12 +11,23 @@ import '../css/sweet.css';
 
 export default {
     name: 'progress-bar',
+    props: {
+        color: {
+            type: String,
+            default: ''
+        },
+        loading: {
+            type: String,
+            default: false
+        },
+        percent: {
+            type: String,
+            default: 0
+        },
+    },
     data:function(){
         return {
             num: 0,
-            percent: 0,
-            loading: false,
-            color: "",
             isFinished: false
         }
     },
@@ -29,44 +40,10 @@ export default {
             this.loading = true;
             this.num = 5;
         }
-        else if($(el).attr("xPercent")!=undefined)
-        {
-            let target = this;
-            let pName = $(el).attr("xPercent");
-            this.percent = eval(`${pName}.ratio`)==undefined?0:eval(`${pName}.ratio`);
-            Object.defineProperty(eval(`${pName}`),'ratio',{
-                get: function(){
-                    return ratio;
-                },
-                set: function(value){
-                    ratio = value;
-                    target.percent = eval(`${pName}.ratio`);
-                }
-            });
-            eval(`${pName}.ratio=0`);   //单属性值一定要初始化//
-        }
     },
     watch: {
         percent: function(){
-            let el = this.$el;
-            let funcs = $(el).attr("xFunc");
-            let func = null;
-            if(funcs!=undefined)
-            {
-                func = funcs.toString().split(' ')[0];
-                eval(`${func}(${this.percent})`);
-                if(this.percent<100){   //当比例小于100将重置isFinished//
-                    this.isFinished = false;
-                }
-                if(funcs.split(' ').length>1)   //如果存在finished函数则执行//
-                {
-                    func = funcs.toString().split(' ')[1];
-                    if(this.percent>=100&&!this.isFinished){
-                        eval(`${func}(${this.percent})`);
-                        this.isFinished = true;
-                    }
-                }
-            }
+            this.$emit('progressChange',this.percent);  //@event progressChange//
         }
     }
 }

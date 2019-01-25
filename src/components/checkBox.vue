@@ -26,11 +26,10 @@ export default {
                 this.$refs.fontstatus.innerHTML = "&#xE005;";
             this.isCheck = !this.isCheck;
             this.Func();
+            this.$emit('click',this.isCheck);   //@event click//
         },
         Func: function(){
             let el = this;
-            if($(el.$el).attr("xFunc")!=undefined)
-                eval(`${$(el.$el).attr("xFunc")}(${this.isCheck})`);
             if($(el.$el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}('${$(el.$el).attr("value")}',${this.isCheck})`);
         }
