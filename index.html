@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE = Edge,chrome = 1">
+    <title>SweetVueDevCenter</title>
+    <script type="text/javascript" src="./dist/SweetVue.min.js"></script>
+    <script type="text/javascript" src="./src/js/vue.min.js"></script>
+</head>
+
+<body>
+<div id="app">
+    <checkbox></checkbox>
+</div>
+<script>
+    Vue.use(SweetVue);
+    new Vue({
+        el:"#app",
+        mounted () {
+            this.$Sweet.barWarning(0,'');
+        }
+    });
+</script>
+</body>
+</html>
