@@ -44,18 +44,19 @@
         <date-picker></date-picker>
         <time-picker></time-picker>
     </div>
+    <imgbox url="./1.jpg" style="height: 150px;"></imgbox>
+    <imgbox url="./2.jpg" style="height: auto;"></imgbox>
 </div>
 <script>
     Vue.use(SweetVue);
     new Vue({
         el:"#app",
         mounted () {
-            this.getUrlImg('./1.jpg');
+            // this.getUrlImg('./1.jpg');
         },
         methods: {
             getUrlImg (url) {
                 let xhr = new XMLHttpRequest();
-                xhr.open("get",url,true);
                 xhr.responseType = "blob";
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState == 4 && xhr.status == 200) {
@@ -68,9 +69,10 @@
                         FR.readAsDataURL(blob);
                     }
                     else if (xhr.readyState == 4) {
-                        
+
                     }
                 }
+                xhr.open("get",url,true);
                 xhr.send();
             }
         }

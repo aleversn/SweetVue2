@@ -1,6 +1,8 @@
 import $ from './js/jquery-3.2.1.min.js';
 import './css/sweet.css';
 
+import Vuex from 'vuex';
+
 import checkBox from './components/checkBox.vue';
 import searchBox from './components/searchBox.vue';
 import comboBox from './components/comboBox.vue';
@@ -18,11 +20,45 @@ import parallaxView from './components/parallaxView.vue';
 import scrollReveal from './components/scrollReveal.vue';
 import flyout from './components/flyout.vue';
 import pivot from './components/pivot.vue';
+import imgbox from './components/imgBox.vue';
 
 
 let SweetVue = {};
 SweetVue.install = function(Vue, options) {
+    Vue.use(Vuex);
+    const SweetStore = new Vuex.Store({
+        state: {
+            imgUriList: []  //{data:Base64String,key:String,state:('none'|'loading'|'done')}
+        },
+        getters: {
+            imgUri: (state) => (key) => {
+                return state.imgUriList.find(item => item.key === key);
+            }  
+        },
+        mutations: {
+            setImgUri (state,imgUri) {
+                let status = imgUri.state;
+                if(imgUri.key == undefined)
+                    return 0;
+                if(status != 'none' && status != 'loading' && status != 'done')
+                    imgUri.state = 'none';
+                let item = state.imgUriList.find(item => item.key === imgUri.key);
+                if(item == undefined)
+                    state.imgUriList.push({data:imgUri.data,key:imgUri.key,state:imgUri.state});
+                else
+                    Vue.set(state.imgUriList,state.imgUriList.indexOf(item),{data:imgUri.data,key:imgUri.key,state:imgUri.state});
+            },
+            clearImgUri (state,key) {
+                let item = state.imgUriList.find(item => item.key === imgUri.key);
+                if(item == undefined)
+                    return 0;
+                else
+                    state.imgUriList.splice(state.imgUriList.indexOf(item),1);
+            }
+        }
+    });
     Vue.prototype.$Sweet = Sweet;
+    Vue.prototype.$SweetStore = SweetStore;
 
     Vue.component(checkBox.name,checkBox);
     Vue.component(searchBox.name,searchBox);
@@ -41,6 +77,7 @@ SweetVue.install = function(Vue, options) {
     Vue.component(scrollReveal.name,scrollReveal);
     Vue.component(flyout.name,flyout);
     Vue.component(pivot.name,pivot);
+    Vue.component(imgbox.name,imgbox);
 }
 
 
