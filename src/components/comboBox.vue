@@ -15,6 +15,19 @@ import '../css/sweet.css';
 
 export default {
     name: 'combobox',
+    props: {
+        setindex: {
+            type: Number,
+            default: 0
+        }
+    },
+    watch: {
+        setindex (val) {
+            this.now = this.items[val];    //更新状态//
+            this.value = this.items[val].value;
+            this.currentIndex = val;
+        }
+    },
     data: function(){
         return {
                 status:false,
