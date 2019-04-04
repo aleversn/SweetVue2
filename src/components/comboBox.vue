@@ -21,13 +21,6 @@ export default {
             default: 0
         }
     },
-    watch: {
-        setindex (val) {
-            this.now = this.items[val];    //更新状态//
-            this.value = this.items[val].value;
-            this.currentIndex = val;
-        }
-    },
     data: function(){
         return {
                 status:false,
@@ -36,6 +29,11 @@ export default {
                 value:-1,
                 currentIndex:-1
             };
+    },
+    watch: {
+        setindex (val) {
+            this.afterIndex(val);
+        }
     },
     mounted:function(){
         let el = this.$el;
@@ -52,6 +50,8 @@ export default {
             this.items = titems;
             this.now = titems[0].name;
         }
+        if(this.setindex != 0)
+            this.afterIndex(this.setindex);
     },
     methods:{
         isSelected: function(e){
@@ -73,6 +73,11 @@ export default {
             this.$emit('chooseitem',{value:this.value,currentIndex:this.currentIndex}); //@event chooseItem//
             if($(el.$el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}('${this.value}',${this.currentIndex})`);
+        },
+        afterIndex (val) {
+            this.now = this.items[val].name;    //更新状态//
+            this.value = this.items[val].value;
+            this.currentIndex = val;
         },
         updateItems: function(){
             for(let i = 0; i < this.items.length; i++)
