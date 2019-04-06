@@ -19,6 +19,10 @@ export default {
         setindex: {
             type: Number,
             default: 0
+        },
+        setdata: {
+            type: Object,
+            default: []
         }
     },
     data: function(){
@@ -33,6 +37,20 @@ export default {
     watch: {
         setindex (val) {
             this.afterIndex(val);
+        },
+        setdata () {
+            if(this.setdata.length > 0)
+            {
+                this.items = []
+                for(let item of this.setdata)
+                {
+                    this.items.push({
+                        name: item.name,
+                        value: item.value == undefined ? this.setdata.indexOf(item) : item.value
+                    });
+                }
+                this.now = this.items[0].name;
+            }
         }
     },
     mounted:function(){
@@ -49,6 +67,18 @@ export default {
             });
             this.items = titems;
             this.now = titems[0].name;
+        }
+        if(this.setdata.length > 0)
+        {
+            this.items = []
+            for(let item of this.setdata)
+            {
+                this.items.push({
+                    name: item.name,
+                    value: item.value == undefined ? this.setdata.indexOf(item) : item.value
+                });
+            }
+            this.now = this.items[0].name;
         }
         if(this.setindex != 0)
             this.afterIndex(this.setindex);
