@@ -219,7 +219,7 @@ class Sweet{
         let xhr = new XMLHttpRequest();
         let formData = new FormData();
         for (let i = 0; i < params.data.length; i++) {
-            formData.append(params.data[i].name == undefined ? `obj: ${i}` : param.data[i].name, params.data[i].value);
+            formData.append(params.data[i].name == undefined ? `obj: ${i}` : params.data[i].name, params.data[i].value);
         }
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {

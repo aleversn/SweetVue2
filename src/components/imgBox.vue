@@ -1,7 +1,12 @@
 <template>
 <div class="imgBox" :style="{background:onbackground?'url('+imgUri.data+') no-repeat':''}">
-    <progress-ring v-show="imgUri.state=='loading'"></progress-ring>
-    <img v-show="imgUri.state=='done'&&!onbackground" alt="" :src="imgUri.data"/>
+    <div v-show="imgUri.state!='done'" class="content">
+        <progress-bar v-show="imgUri.state=='none'" xLoading="true" style="width: 100%;"></progress-bar>
+        <progress-ring v-show="imgUri.state=='loading'"></progress-ring>
+    </div>
+    <transition name="fade-in">
+        <img v-show="imgUri.state=='done'&&!onbackground" alt="" :src="imgUri.data"/>
+    </transition>
 </div>
 </template>
 
@@ -14,9 +19,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    img {
+    z-index: 0;
+    .content
+    {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+    }
+    img
+    {
         width: 100%;
         height: auto;
+        z-index: -1;
+    }
+
+    .fade-in-enter,.fade-in-leave-to
+    {
+        opacity: 0;
+        transition: all 0.8s;
+    }
+    .fade-in-enter-to,.fade-in-leave
+    {
+        opacity: 1;
+        transition: all 0.8s;
     }
 }
 </style>
