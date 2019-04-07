@@ -1275,7 +1275,7 @@ input.sinput.search
 {
 	color: whitesmoke;
 }
-.switcher-enter-active,
+.switcher-enter-active
 {
 	opacity: 0;
 	transition: 0.2s;

@@ -1,17 +1,168 @@
 <template>
 <div class="flipview">
     <div class="fake-package" ref="package"><slot></slot></div>
-    <div class="flip-container" ref="container">
+    <transition name="fade-in">
+    <div v-show="enable" class="flip-container" ref="container">
 
     </div>
-    <p class="slidebtn" style="left: 0px;" @click="slide_last">&#xE0E2;</p>
-    <p class="slidebtn" style="right: 0px;" @click="slide_next">&#xE0E3;</p>
-    <span class="bot-controller" ref="bot_controller">
+    </transition>
+    <transition name="fade-in"><p v-show="enable" class="slidebtn" style="left: 0px;" :class="{dark:xTheme=='dark'}" @click="slide_last">&#xE0E2;</p></transition>
+    <transition name="fade-in"><p v-show="enable" class="slidebtn" style="right: 0px;" :class="{dark:xTheme=='dark'}" @click="slide_next">&#xE0E3;</p></transition>
+    <transition name="fade-in">
+    <span v-show="enable" class="bot-controller" :class="{dark:xTheme=='dark'}" ref="bot_controller">
         <p v-for="(item,index) in fakeArray" :key="index" @click="slide_index">{{item.value}}</p>
         <button @click="slider_pause">&#xE103;</button>
     </span>
+    </transition>
 </div>
 </template>
+
+<style lang="scss" scoped>
+.flipview {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    img {
+        width: 100%;
+        height: auto;
+    }
+    .fake-package {
+        display: none;
+    }
+    .flip-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        overflow: hidden;
+        div {
+            position: relative;
+            min-width: 100%;
+            min-height: 100%;
+        }
+    }
+    &:hover {
+        .controlbtn {
+            position: absolute;
+            height: 35px;
+            padding: 8px;
+            font-family: "Segoe MDL2";
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.5);
+            color: rgba(242, 242, 242, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .slidebtn {
+            opacity: 1;
+            &.dark {
+                opacity: 1;
+            }
+        }
+    }
+    .controlbtn {
+        display: none;
+        transition: all 0.2s;
+        -webkit-transition: all 0.2s;
+        &:hover {
+            background: rgba(0, 0, 0, 0.8);
+            color: rgba(242, 242, 242, 0.8);
+        }
+    }
+    .slidebtn {
+        position: absolute;
+        top: calc(50% - 25px);
+        width: 25px;
+        height: 50px;
+        background: rgba(0, 0, 0, 0.05);
+        font-family: "Segoe MDL2";
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        cursor: pointer;
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s, color 0.01s;
+        -webkit-user-select: none;
+        &:hover {
+            background: rgba(0, 0, 0, 0.15);
+            &.dark {
+                background: rgba(242, 242, 242, 0.15);
+            }
+        }
+        &:active {
+            background: rgba(0, 120, 215, 0.6);
+            color: rgba(242, 242, 242, 0.6);
+            &.dark {
+                background: rgba(0, 120, 215, 0.6);
+                color: rgba(242, 242, 242, 0.6);
+            }
+        }
+        &.dark {
+            background: rgba(242, 242, 242, 0.05);
+            color: rgba(242, 242, 242, 1);
+        }
+    }
+    .bot-controller {
+        position: absolute;
+        left: 0px;
+        bottom: 0px;
+        width: 100%;
+        height: 50px;
+        font-family: "Segoe MDL2";
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        -webkit-user-select: none;
+        * {
+            margin: 1.5px;
+            cursor: pointer;
+        }
+        &.dark {
+            * {
+                color: rgba(242, 242, 242, 1);
+            }
+        }
+        button {
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            font-family: "Segoe MDL2";
+            border: thin;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &:hover {
+                background: rgba(0, 0, 0, 0.1);
+                transition: all 0.3s;
+                -webkit-transition: all 0.3s;
+            }
+            &:active {
+                background: rgba(0, 0, 0, 0.15);
+            }
+        }
+    }
+}
+.fade-in-enter,.fade-in-leave-to
+{
+    opacity: 0;
+    transition: all 0.8s;
+}
+.fade-in-enter-to,.fade-in-leave
+{
+    opacity: 1;
+    transition: all 0.8s;
+}
+</style>
+
 
 <script>
 import $ from '../js/jquery-3.2.1.min.js';
@@ -19,10 +170,32 @@ import '../css/sweet.css';
 
 export default {
     name: 'flipview',
+    props: {
+        await: {
+            type: String,
+            default: 'false'
+        },
+        xTheme: {
+            type: String,
+            default: 'light'
+        }
+    },
+    watch: {
+        await (val) {
+            if(val == 'done' && !this.enable)
+            {
+                $(this.$el).ready(() => {
+                    this.slider_init();
+                    this.slider();
+                });
+            }
+        }
+    },
     data:function(){
         return {
             speed:1000,
             lock:true,
+            enable:false,
             timer:null,
             count:0,
             length:0,
@@ -37,19 +210,18 @@ export default {
             this.speed = $(el).attr("xSpeed");
         if($(el).attr("xPeriod")>0)
             this.period = $(el).attr("xPeriod");
-        if($(el).attr("xTheme")=="dark")
+        if(this.await == 'false')
         {
-            $(el).find(".slidebtn").attr("class","slidebtn dark");
-            $(el).find(".bot-controller").attr("class","bot-controller dark");
+            this.slider_init();
+            this.slider();
         }
-        this.slider_init();
-        this.slider();
     },
     methods:{
         slider_init: function(){
             this.length = $(this.$refs.package).children("div").length;
             $(this.$refs.container).append($(this.$refs.package).children("div").get(0));
             for(var i=0;i<this.length;i++){i==0?this.fakeArray.push({value:"\uF127"}):this.fakeArray.push({value:"\uF126"});}  //纯数组对象无法动态双向绑定//
+            this.enable = true;
         },
         slide_next: function(f=1.0){
             if(this.lock){  //控制slider的异步等待//

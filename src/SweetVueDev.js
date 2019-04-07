@@ -190,6 +190,57 @@ class Sweet{
         });
         return r;
     }
+    //GetAsync//PostAsync//简化//
+    static gs(url,func = null) {
+        if(func == null)
+            this.AjaxGetAsync(url,()=>{});
+        else
+            this.AjaxGetAsync(url,func,true);
+    }
+    static ps(url,data,func = null) {
+        if(func == null)
+            this.AjaxPostAsync(url,data,()=>{});
+        else
+            this.AjaxPostAsync(url,data,func,true);
+    }
+    //
+    static xhr(params = {})
+    {
+        if(params.url == undefined)
+        {
+            this.barWarning(0,'expected url');
+            return 0;
+        }
+        if(params.data == undefined)
+        {
+            this.barWarning(0,'expected data');
+            return 0;
+        }
+        let xhr = new XMLHttpRequest();
+        let formData = new FormData();
+        for (let i = 0; i < params.data.length; i++) {
+            formData.append(params.data[i].name == undefined ? `obj: ${i}` : param.data[i].name, params.data[i].value);
+        }
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                if(params.success != null)
+                    params.success(xhr.responseText);
+            }
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status !== 200) {
+                if(params.error != null)
+                    params.error(xhr.responseText);
+            }
+        }
+
+        let loaded = 0;
+        xhr.upload.addEventListener("progress", function (e) {
+            loaded += e.loaded;
+            if(params.progress != null)
+                params.progress(loaded,e.loaded);
+        });
+        xhr.open("post", params.url);
+        xhr.send(formData);
+    }
     static SwiftWarning(e,c)
     {
         var x=$(e).prop('class');

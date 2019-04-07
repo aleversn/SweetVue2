@@ -249,6 +249,7 @@ export default {
                 eval(`${$(el.$el).attr("xFunc")}(day)`);
             if($(el.$el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}(day)`);
+            this.$emit('choosedate',day);
         }
     }
 }

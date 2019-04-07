@@ -32,6 +32,168 @@
 </div>
 </template>
 
+<style lang="scss" scoped>
+.calendar-view {
+    position: relative;
+    width: 290px;
+    height: 320px;
+    background: rgba(235, 235, 235, 0.6);
+    border: rgba(120, 120, 120, 0.35) solid 2px;
+    font-family: "微软雅黑";
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    -webkit-backdrop-filter: blur(25px);
+    &.dark {
+        background: rgba(0, 0, 0, 0.6);
+    }
+    .control-bar {
+        width: 100%;
+        height: 40px;
+        font-family: "微软雅黑", "Segoe MDL2";
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        -webkit-backdrop-filter: blur(25px);
+        z-index: 1;
+        .switcher {
+            margin-left: 8px;
+            font-size: 12px;
+            font-weight: 100;
+            color: gray;
+            transition: all 0.2s;
+            user-select: none;
+            -webkit-transition: all 0.2s;
+            -webkit-user-select: none;
+            cursor: pointer;
+            &:hover {
+                opacity: 0.8;
+            }
+            &.dark {
+                color: whitesmoke;
+            }
+        }
+        .slider-bar {
+            width: 50px;
+            display: flex;
+            justify-content: space-around;
+            p {
+                font-family: "Segoe MDL2";
+                font-size: 15px;
+                transition: all 0.3s;
+                -webkit-transition: all 0.3s;
+                user-select: none;
+                -webkit-user-select: none;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.6;
+                }
+            }
+            &.dark {
+                color: whitesmoke;
+            }
+        }
+    }
+    .pickerContainer {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        z-index: -1;
+        &.days {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.6);
+            border: rgba(120, 120, 120, 0) solid 2px;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s;
+            -webkit-transition: all 0.3s;
+            transition-delay: 0.05s;
+            &.dark {
+                background: rgba(0, 0, 0, 0.3);
+                color: whitesmoke;
+            }
+            &:hover {
+                border: rgba(120, 120, 120, 0.35) solid 2px;
+            }
+            &.preview {
+                background: rgba(240, 240, 240, 0.6);
+                color: gray;
+                &.dark {
+                    background: rgba(120, 120, 120, 0.5);
+                    color: rgba(255, 255, 255, 0.5);
+                }
+            }
+            &.choose {
+                background: rgba(0, 120, 215, 0.8);
+                &:hover {
+                    border: rgba(0, 0, 0, 0.35) solid 2px;
+                }
+            }
+            &.day {
+                &:focus {
+                    border: rgba(0, 120, 215, 0.8) solid 2px;
+                }
+            }
+            &.weekday {
+                background: transparent;
+                &.dark {
+                    background: transparent;
+                }
+                &:hover {
+                    border: rgba(120, 120, 120, 0) solid 2px;
+                }
+            }
+        }
+    }
+
+    .switcher-enter-active
+    {
+        opacity: 0;
+        transition: 0.2s;
+        -webkit-transition: 0.2s;
+    }
+    .switcher-leave,.switcher-enter-to
+    {
+        opacity: 1;
+    }
+    .switcher-leave-to
+    {
+        opacity: 0;
+    }
+    .calendar-view .pickerContainer.years,.months
+    {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+    
+    .pickerContainer-enter
+    {
+        transform: scale(0);
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        transition-delay: 0.5s;
+    }
+    .pickerContainer-enter-to
+    {
+        transform: scale(1);
+    }
+    .pickerContainer-leave
+    {
+        transform: scale(1);
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+    }
+    .pickerContainer-leave-to
+    {
+        transform: scale(0);
+    }
+}
+</style>
+
+
 <script>
 import $ from '../js/jquery-3.2.1.min.js';
 import '../css/sweet.css';
@@ -231,6 +393,7 @@ export default {
                 eval(`${$(el.$el).attr("xFunc")}(day)`);
             if($(el.$el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}(day)`);
+            this.$emit('choosedate',day);
         }
     }
 }
