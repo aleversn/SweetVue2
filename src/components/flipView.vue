@@ -6,10 +6,10 @@
 
     </div>
     </transition>
-    <transition name="fade-in"><p v-show="enable" class="slidebtn" style="left: 0px;" :class="{dark:xTheme=='dark'}" @click="slide_last">&#xE0E2;</p></transition>
-    <transition name="fade-in"><p v-show="enable" class="slidebtn" style="right: 0px;" :class="{dark:xTheme=='dark'}" @click="slide_next">&#xE0E3;</p></transition>
+    <transition name="fade-in"><p v-show="enable&&length>1" class="slidebtn" style="left: 0px;" :class="{dark:xTheme=='dark'}" @click="slide_last">&#xE0E2;</p></transition>
+    <transition name="fade-in"><p v-show="enable&&length>1" class="slidebtn" style="right: 0px;" :class="{dark:xTheme=='dark'}" @click="slide_next">&#xE0E3;</p></transition>
     <transition name="fade-in">
-    <span v-show="enable" class="bot-controller" :class="{dark:xTheme=='dark'}" ref="bot_controller">
+    <span v-show="enable&&length>1" class="bot-controller" :class="{dark:xTheme=='dark'}" ref="bot_controller">
         <p v-for="(item,index) in fakeArray" :key="index" @click="slide_index">{{item.value}}</p>
         <button @click="slider_pause">&#xE103;</button>
     </span>
@@ -289,6 +289,8 @@ export default {
             clearInterval(this.timer);
             var el = this;
             this.timer = setInterval(function(){
+                if(el.length == 1)
+                    return 0;
                 el.slide_next();
             },el.period);
         },

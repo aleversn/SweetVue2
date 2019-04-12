@@ -17,7 +17,7 @@ export default {
     name: 'combobox',
     props: {
         setindex: {
-            type: Number,
+            type: String,
             default: 0
         },
         setdata: {
@@ -105,6 +105,19 @@ export default {
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}('${this.value}',${this.currentIndex})`);
         },
         afterIndex (val) {
+            try
+            {
+                this.now = this.items[val].name;    //更新状态//
+                this.value = this.items[val].value;
+                this.currentIndex = val;
+            }
+            catch(e)
+            {
+                this.afterIndexByValue(val);
+            }
+        },
+        afterIndexByValue (val) {
+            val = this.items.indexOf(this.items.find(item => item.value == val));
             this.now = this.items[val].name;    //更新状态//
             this.value = this.items[val].value;
             this.currentIndex = val;

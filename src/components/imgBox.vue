@@ -5,7 +5,7 @@
         <progress-ring v-show="imgUri.state=='loading'"></progress-ring>
     </div>
     <transition name="fade-in">
-        <img v-show="imgUri.state=='done'&&!onbackground" alt="" :src="imgUri.data"/>
+        <img v-if="imgUri.state=='done'&&!onbackground" draggable="false" alt="" :src="imgUri.data"/>
     </transition>
 </div>
 </template>
@@ -42,11 +42,13 @@
     .fade-in-enter,.fade-in-leave-to
     {
         opacity: 0;
+        filter: blur(8px);
         transition: all 0.8s;
     }
     .fade-in-enter-to,.fade-in-leave
     {
         opacity: 1;
+        filter: blur(0px);
         transition: all 0.8s;
     }
 }
@@ -75,7 +77,10 @@ export default {
         }
     },
     data () {
-        
+        return {
+            xhr: false,
+            formatTimer: null
+        }
     },
     computed: {
         imgUri () {
@@ -86,7 +91,10 @@ export default {
     },
     watch: {
         url () {
-            this.LoadingImg();
+            if(this.xhr != false)
+                this.xhr.abort();
+            if(this.url!='')
+                this.LoadingImg();
         }
     },
     mounted () {
@@ -103,6 +111,18 @@ export default {
                 });
                 this.getUrlImg(this.url);
             }
+            clearInterval(this.formatTimer);
+            this.formatTimer = setInterval(() => {
+                if((this.imgUri.data == undefined || this.imgUri.data.length == 0) && (this.imgUri.state == 'none' || this.imgUri.state == 'done'))
+                {
+                    this.$store.commit('setImgUri',{
+                        data: '',
+                        key: this.xId,
+                        state: 'loading'
+                    });
+                    this.getUrlImg();
+                }
+            },3000);
         },
         getUrlImg (url) {
             let xhr = new XMLHttpRequest();
@@ -123,6 +143,7 @@ export default {
                 }
             }
             xhr.send();
+            this.xhr = xhr;
         },
         UpdateStore (base64) {
             this.$SweetStore.commit('setImgUri',{
@@ -136,6 +157,9 @@ export default {
             if($(el.$el).attr("pFunc")!=undefined)  //pFunc//
                 eval(`this.$parent.${$(el.$el).attr("pFunc")}('${$(el.$el).attr("value")}',${this.isCheck})`);
         }
+    },
+    beforeDestroy () {
+        clearInterval(this.formatTimer);
     }
 }
 </script>
