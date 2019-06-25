@@ -1,6 +1,6 @@
 <template>
-<div class="sinput search" style="height:25px;" :value="content">
-    <input style="width:100%; background:transparent; border:none; outline:none; box-shadow:none;" v-model="content" ref="input"/>
+<div class="sinput search" style="height:25px;">
+    <input style="width:100%; background:transparent; border:none; outline:none; box-shadow:none;" v-model="content" ref="input" @keyup="Enter"/>
     <p class="search-icon" :style="xIconColor" @mousedown="Clicked" @mouseup="ClickedUp" ref="icon">{{xIcon}}</p>
 </div>
 </template>
@@ -11,6 +11,12 @@ import '../css/sweet.css';
 
 export default {
     name: 'searchbox',
+    props: {
+        model: {
+            type: String,
+            default: ''
+        }
+    },
     data: function(){
         return {
             xIcon:"&#xE721;",
@@ -20,6 +26,14 @@ export default {
             },
             content:""
         };
+    },
+    watch: {
+        content (val) {
+            this.$emit('update:model',val);
+        },
+        model (val) {
+            this.content = val;
+        }
     },
     mounted:function(){
         let el = this.$el;
@@ -69,12 +83,12 @@ export default {
             });
             $(this.$refs.icon).click(function(){eval(`target.$parent.${$(el).attr("pIconClick")}("${$(target.$refs.input).val()}")`)});
         }
-        if($(el).attr("xModel")!=null)
-            this.xModel($(el).attr("xModel"));
+        this.content = this.model;
     },
     methods:{
         Clicked: function(){
             this.xIconColor.color = "rgba(242,242,242,1)";
+            this.$emit('search', $(this.$refs.input).val());
         },
         ClickedUp: function(){
             if($(this.$el).attr("xIconColor")!=null)
@@ -82,19 +96,9 @@ export default {
             else
                 this.xIconColor.color = "rgba(36,36,36,1)";
         },
-        xModel (ParamName) {
-            let el = this;
-            // let val = "";	//用val存储content的值//属性与存取描述符//因为Object.defineProperty中的this不一定指当前this，所以在不用el的情况下可以用val做中介///
-            Object.defineProperty(el,'content',{  //设立content监听//
-                get: function(){
-                    eval(`content = el.$parent.${ParamName};`);
-                    return content;
-                },
-                set: function(value){
-                    content = value;
-                    eval(`el.$parent.${ParamName} = content;`);
-                }
-            });
+        Enter (event) {
+            if(event.keyCode == 13)
+                this.$emit('search', $(this.$refs.input).val());
         }
     }
 }

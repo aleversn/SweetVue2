@@ -22,6 +22,8 @@ import flyout from './components/flyout.vue';
 import pivot from './components/pivot.vue';
 import imgbox from './components/imgBox.vue';
 
+import fluentProgressBar from './components/fluentProgressBar.vue';
+
 
 let SweetVue = {};
 SweetVue.install = function(Vue, options) {
@@ -33,7 +35,7 @@ SweetVue.install = function(Vue, options) {
         getters: {
             imgUri: (state) => (key) => {
                 return state.imgUriList.find(item => item.key === key);
-            }  
+            }
         },
         mutations: {
             setImgUri (state,imgUri) {
@@ -48,7 +50,7 @@ SweetVue.install = function(Vue, options) {
                 else
                     Vue.set(state.imgUriList,state.imgUriList.indexOf(item),{data:imgUri.data,key:imgUri.key,state:imgUri.state});
             },
-            clearImgUri (state,key) {
+            clearImgUri (state, key) {
                 let item = state.imgUriList.find(item => item.key === imgUri.key);
                 if(item == undefined)
                     return 0;
@@ -78,6 +80,8 @@ SweetVue.install = function(Vue, options) {
     Vue.component(flyout.name,flyout);
     Vue.component(pivot.name,pivot);
     Vue.component(imgbox.name,imgbox);
+
+    Vue.component(fluentProgressBar.name,fluentProgressBar);
 }
 
 

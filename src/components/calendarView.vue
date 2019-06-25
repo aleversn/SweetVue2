@@ -14,16 +14,16 @@
     <div style="width: 100%; height: 280px;">
         <transition-group name="pickerContainer">
         <div v-show="status==0" class="pickerContainer years" key="p0" ref="p0">
-            <button v-for="(year,index) in years" :class="{preview:index>10,dark:theme,choose:year==current.year}" :key="index" @click="pickYear(year)">{{year}}</button>
+            <button v-for="(year,index) in years" :class="{preview:index>10,dark:theme,choose:year==current.year}" :key="'year:' + index" @click="pickYear(year)">{{year}}</button>
         </div>
         <div v-show="status==1" class="pickerContainer months" key="p1" ref="p1">
-            <button v-for="(month,index) in months" :class="{preview:index>11,dark:theme,choose:month==current.month&&barCurrent.year==current.year}" :key="index" @click="pickMonth(index)">{{month}}月</button>
+            <button v-for="(month,index) in months" :class="{preview:index>11,dark:theme,choose:month==current.month&&barCurrent.year==current.year}" :key="'month:' + index" @click="pickMonth(index)">{{month}}月</button>
         </div>
         <div v-show="status==2" class="pickerContainer days" key="p2" ref="p2">
-            <button class="weekday" :class="{dark:theme}" v-for="(weekday,index) in weekdays" :key="index">{{weekday}}</button>
+            <button class="weekday" :class="{dark:theme}" v-for="(weekday,index) in weekdays" :key="'weekday:' + index">{{weekday}}</button>
             <button class="day" v-for="(day,index) in days" 
             :class="{preview:!day.current,dark:theme,choose:day.num==current.date&&barCurrent.year==current.year&&barCurrent.month==current.month}"
-            :title="day.cyear+'年'+day.cmonth+'月'+day.num+'日'" :key="index" @click="pickDay(day)">
+            :title="day.cyear+'年'+day.cmonth+'月'+day.num+'日'" :key="'day:' + index" @click="pickDay(day)">
             {{day.num}}
             </button>
         </div>
@@ -237,7 +237,7 @@ export default {
     methods: {
         updateRing: function(){ //update decades//
             for(let i = 0; i < this.years.length; i++){
-                Vue.set(this.years,i,this.barCurrent.yearRing+i);
+                this.$set(this.years,i,this.barCurrent.yearRing+i);
             }
         },
         pickYear: function(year){
@@ -260,6 +260,7 @@ export default {
                 month: day.cmonth,//for the picker shouldn't min 1//
                 date: day.num};
             this.Func(tday);
+            this.$emit('choose',tday);
             return {
                 year: day.cyear,
                 month: day.cmonth - 1,

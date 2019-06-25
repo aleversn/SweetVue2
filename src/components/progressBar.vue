@@ -1,7 +1,7 @@
 <template>
-<div class="s-progressbar" :class="{normal:!loading}" :value="percent<=100?percent:100">
+<div class="s-progressbar" :class="{normal:!tLoading}" :value="tPercent<=100?tPercent:100">
     <p v-for="i in num" :style="{background:color}" :key="i"></p>
-    <i v-if="!loading" :style="{'width':(percent<=100?percent:100)+'%',background:color}"></i>
+    <i v-if="!tLoading" :style="{'width':(tPercent<=100?tPercent:100)+'%',background:color}"></i>
 </div>
 </template>
 
@@ -17,17 +17,17 @@ export default {
             default: ''
         },
         loading: {
-            type: String,
             default: false
         },
         percent: {
-            type: String,
             default: 0
         },
     },
     data:function(){
         return {
             num: 0,
+            tLoading: false,
+            tPercent: 0,
             isFinished: false
         }
     },
@@ -37,13 +37,19 @@ export default {
             this.color = $(el).attr("xColor");
         if($(el).attr("xLoading")=="true")
         {
-            this.loading = true;
+            this.tLoading = true;
             this.num = 5;
         }
     },
     watch: {
-        percent: function(){
-            this.$emit('progresschange',this.percent);  //@event progressChange//
+        loading (val) {
+            this.tLoading = val;
+        },
+        percent (val) {
+            this.tPercent = val;
+        },
+        tPercent: function () {
+            this.$emit('progresschange',this.tPercent);  //@event progressChange//
         }
     }
 }

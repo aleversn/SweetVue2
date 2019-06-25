@@ -18,11 +18,13 @@ export default {
     props: {
         setindex: {
             type: String,
-            default: 0
+            default: '0'
         },
         setdata: {
-            type: Object,
-            default: []
+            type: Array,
+            default: () => {
+                return [];
+            }
         }
     },
     data: function(){

@@ -58,9 +58,14 @@ module.exports = {
         extensions: ['*', '.js', '.vue', '.json']
     },
     devServer: {
-        historyApiFallback: true,
-        noInfo: true,
-        overlay: true
+        contentBase: path.resolve(__dirname, './'),  // 告诉服务器为该路径提供服务
+        host: 'localhost', 
+        port:8080,    //端口
+        open:true,    //自动打开页面，
+        hot:true,    //开启热更新，
+        compress: true, // 服务器压缩式，一般为`true`，
+        inline: true, // 默认为true,在打包时会注入一段代码到最后的js中，用来监视页面的改动而自动刷新页面
+        publicPath: 'dist/' //它与out.publicPath的值是一样的，值为上面contentBase目录的子目录
     },
     performance: {
         hints: false

@@ -23,6 +23,9 @@
     width: 100%;
     height: 300px;
     overflow: hidden;
+    *{
+        font-family: '微软雅黑','Segoe MDL2','Segoe UI Symbol';
+    }
     img {
         width: 100%;
         height: auto;

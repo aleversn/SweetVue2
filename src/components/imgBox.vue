@@ -35,7 +35,8 @@
     img
     {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover;
         z-index: -1;
     }
 
@@ -59,7 +60,6 @@
 <script>
 import $ from '../js/jquery-3.2.1.min.js';
 import progressRing from './progressRing.vue';
-import { mapState } from 'vuex'
 
 export default {
     name: 'imgbox',
@@ -68,24 +68,31 @@ export default {
     },
     props: {
         url: {
-            type: String,
             default: ''
         },
+        onlazy: {
+            default: false
+        },
         onbackground: {
-            type: String,
             default: false
         }
     },
     data () {
         return {
             xhr: false,
+            lazy: false,
+            lazyTimer: null,
             formatTimer: null
         }
     },
     computed: {
         imgUri () {
-            if(this.$SweetStore.getters.imgUri(this.url)==undefined)
-                return {data:'',key:this.url,state:'none'};
+            if(this.$SweetStore.getters.imgUri(this.url) == undefined)
+                this.$SweetStore.commit('setImgUri', {
+                    data: '',
+                    key: this.url,
+                    state: 'none'
+                });
             return this.$SweetStore.getters.imgUri(this.url);
         }
     },
@@ -93,38 +100,51 @@ export default {
         url () {
             if(this.xhr != false)
                 this.xhr.abort();
-            if(this.url!='')
+            if(this.url != '' && !this.lazy)
                 this.LoadingImg();
+        },
+        onlazy (val) {
+            this.lazy = val.toString() == 'true' ? true : false;
+        },
+        lazy (val) {
+            if(val)
+                this.lazyInit();
         }
     },
     mounted () {
-        if(this.url!='')
+        this.lazy = this.onlazy.toString() == 'true' ? true : false;
+        if(this.url != '' && ! this.lazy)
             this.LoadingImg();
     },
     methods:{
         LoadingImg () {
-            if(this.imgUri.state=='none'){
+            if(this.imgUri.state == 'none'){
                 this.$SweetStore.commit('setImgUri',{
-                    data:'',
-                    key:this.url,
+                    data: '',
+                    key: this.url,
                     state:'loading'
                 });
                 this.getUrlImg(this.url);
             }
             clearInterval(this.formatTimer);
-            this.formatTimer = setInterval(() => {
-                if((this.imgUri.data == undefined || this.imgUri.data.length == 0) && (this.imgUri.state == 'none' || this.imgUri.state == 'done'))
+            this.formatTimer = setInterval(() => {  // if data is none and status is not loading then active loading again. //
+                if((this.$SweetStore.getters.imgUri(this.url).data == undefined || this.$SweetStore.getters.imgUri(this.url).data == '' || this.$SweetStore.getters.imgUri(this.url).data == null) && (this.$SweetStore.getters.imgUri(this.url).state == 'none' || this.$SweetStore.getters.imgUri(this.url).state == 'done'))
                 {
-                    this.$store.commit('setImgUri',{
+                    this.$SweetStore.commit('setImgUri', {
                         data: '',
-                        key: this.xId,
+                        key: this.url,
                         state: 'loading'
                     });
-                    this.getUrlImg();
+                    this.getUrlImg(this.url);
                 }
             },3000);
         },
         getUrlImg (url) {
+            if(url == undefined)
+            {
+                console.log(`imgBox can't find url: ${url}.`);
+                return 0;
+            }
             let xhr = new XMLHttpRequest();
             xhr.open("get",url,true);
             xhr.responseType = "blob";
@@ -147,10 +167,21 @@ export default {
         },
         UpdateStore (base64) {
             this.$SweetStore.commit('setImgUri',{
-                data:base64,
-                key:this.url,
-                state:'done'
+                data: base64,
+                key: this.url,
+                state: 'done'
             });
+        },
+        lazyInit () {
+            clearInterval(this.lazyTimer);
+            this.lazyTimer = setInterval(() => {
+                if(this.$el.getBoundingClientRect().top < window.innerHeight)
+                {
+                    this.lazy = false;
+                    this.LoadingImg();
+                    clearInterval(this.lazyTimer);
+                }
+            }, 300);
         },
         Func: function(){
             let el = this;
