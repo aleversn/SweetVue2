@@ -1,13 +1,163 @@
 <template>
-<div class="combobox" ref="co_head" style="width: 80px;" :style="{'z-index':status?500:''}" @click="isSelected">
+<div class="combobox" :class="{dark:xTheme=='dark'}" ref="co_head" style="width: 80px;" :style="{'z-index':status?500:''}" @click="isSelected">
     <div v-show="false" ref="itemContainer"><slot></slot></div>
     <div v-show="status" class="combobox-item-container" ref="co_items">
-        <option v-for="(item,index) in items" :class="{choose:index==currentIndex}" :index="index" @click="Choose" :key="index">{{item.name==null?item:item.name}}</option>
+        <option v-for="(item,index) in items" :class="{choose:index==currentIndex}" :index="index" @click="Choose" :key="index" :title="item.name == null ? item : item.name">{{item.name==null?item:item.name}}</option>
     </div>
-    <p style="width: 100%; padding: 5px;">{{now}}</p>
-    <p style="padding: 5px; font-family: Segoe MDL2; font-size: 12px; color: rgba(36,36,36,0.5);">&#xE70D;</p>
+    <p class="format">{{now}}</p>
+    <p class="drop-down">&#xE70D;</p>
 </div>
 </template>
+
+<style lang="scss" scoped>
+.combobox {
+    position: relative;
+    width: auto;
+    height: 25px;
+    border: rgba(36, 36, 36, 0.3) solid 2px;
+    font-family: "微软雅黑", Segoe MDL2;
+    font-size: 15px;
+    color: rgba(36, 36, 36, 0.8);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    z-index: 120;
+    transition: all 0.3s;
+    user-select: none;
+    -webkit-user-select: none;
+
+    p.format
+    {
+        width: 100%;
+        padding: 5px;
+        font-size: 15px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    p.drop-down
+    {
+        padding: 5px;
+        font-family: Segoe MDL2;
+        font-size: 12px;
+        color: rgba(36,36,36,0.5);
+    }
+
+    &:hover {
+        border-color: rgba(36, 36, 36, 0.6);
+    }
+
+    &:active {
+        background: rgba(36, 36, 36, 0.1);
+        border-color: rgba(36, 36, 36, 0.3);
+    }
+
+    &.dark
+    {
+        color: whitesmoke;
+        border-color: rgba(250, 250, 250, 0.3);
+
+        p.format
+        {
+            color: whitesmoke;
+        }
+
+        p.drop-down
+        {
+            color: whitesmoke;
+        }
+
+        &:hover {
+            border-color: rgba(250, 250, 250, 0.6);
+        }
+
+        &:active {
+            background: rgba(250, 250, 250, 0.1);
+            border-color: rgba(250, 250, 250, 0.3);
+        }
+
+        .combobox-item-container
+        {
+            background: rgba(36, 36, 36, 0.9);
+
+            option
+            {
+                color: whitesmoke;
+            }
+        }
+    }
+    .combobox-item-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        padding: 8px 0px;
+        background: rgba(242, 242, 242, 0.9);
+        border: rgba(36, 36, 36, 0.05) solid thin;
+        box-sizing: border-box;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1),
+            0px 6px 8px rgba(0, 0, 0, 0.1);
+        overflow: auto;
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        z-index: 125;
+        &::-webkit-scrollbar {
+            width: 5px;
+            background-color: transparent;
+            border-radius: 0px;
+            &:hover {
+                width: 8px;
+            }
+        }
+        &::-webkit-scrollbar-thumb {
+            &:vertical {
+                height: 50px;
+                background-color: rgba(36, 36, 36, 0.1);
+                border-radius: 5px;
+                &:hover {
+                    background-color: rgba(36, 36, 36, 0.2);
+                }
+            }
+        }
+        option {
+            height: 25px;
+            padding-left: 5px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            transition: all 0.2s;
+            -webkit-transition: all 0.2s;
+            &:hover {
+                background: rgba(36, 36, 36, 0.05);
+            }
+            &:active {
+                background: rgba(36, 36, 36, 0.2);
+            }
+            &.choose {
+                background: rgba(0, 120, 215, 0.3);
+                &:hover {
+                    background: rgba(0, 120, 215, 0.35);
+                }
+                &:active {
+                    background: rgba(0, 120, 215, 0.45);
+                }
+            }
+        }
+    }
+}
+</style>
+
 
 <script>
 import $ from '../js/jquery-3.2.1.min.js';
@@ -16,8 +166,10 @@ import '../css/sweet.css';
 export default {
     name: 'combobox',
     props: {
+        xTheme: {
+            default: 'light'
+        },
         setindex: {
-            type: String,
             default: '0'
         },
         setdata: {
@@ -31,7 +183,7 @@ export default {
         return {
                 status:false,
                 items:["ComboBox"],
-                now:"Now",
+                now:"",
                 value:-1,
                 currentIndex:-1
             };
@@ -51,8 +203,21 @@ export default {
                         value: item.value == undefined ? this.setdata.indexOf(item) : item.value
                     });
                 }
-                this.now = this.items[0].name;
+                this.now = this.items[this.currentIndexSafe].name;
             }
+            else
+            {
+                this.items = ["Combobox"];
+                this.now = "";
+            }
+        }
+    },
+    computed: {
+        currentIndexSafe () {
+            if(this.setindex < 0 || this.setindex > this.items.length - 1)
+                return 0;
+            else
+                return this.setindex;
         }
     },
     mounted:function(){
@@ -68,7 +233,7 @@ export default {
                     });
             });
             this.items = titems;
-            this.now = titems[0].name;
+            this.now = titems[this.currentIndexSafe].name;
         }
         if(this.setdata.length > 0)
         {
@@ -80,10 +245,11 @@ export default {
                     value: item.value == undefined ? this.setdata.indexOf(item) : item.value
                 });
             }
-            this.now = this.items[0].name;
+            this.now = this.items[this.currentIndexSafe].name;
         }
         if(this.setindex != 0)
             this.afterIndex(this.setindex);
+        this.outSideClick();
     },
     methods:{
         isSelected: function(e){
@@ -109,6 +275,8 @@ export default {
         afterIndex (val) {
             try
             {
+                if(val < 0 || val > this.items.length - 1)
+                    return 0;
                 this.now = this.items[val].name;    //更新状态//
                 this.value = this.items[val].value;
                 this.currentIndex = val;
@@ -120,6 +288,8 @@ export default {
         },
         afterIndexByValue (val) {
             val = this.items.indexOf(this.items.find(item => item.value == val));
+            if(val == undefined)
+                return 0;
             this.now = this.items[val].name;    //更新状态//
             this.value = this.items[val].value;
             this.currentIndex = val;
@@ -138,6 +308,23 @@ export default {
             this.now = this.value==-1?this.items[0].name:this.now;
             this.value = this.value==-1?this.items[0].value:this.value;
             this.currentIndex = this.currentIndex==-1?0:this.currentIndex;
+        },
+        outSideClick () {
+            window.addEventListener('click', event => {
+                let x = event.target;
+                let _self = false;
+                while(x.tagName.toLowerCase() != 'body')
+                {
+                    if(x == this.$el)
+                    {
+                        _self = true;
+                        break;
+                    }
+                    x = x.parentNode;
+                }
+                if(!_self)
+                    this.status = false;
+            });
         }
     }
 }

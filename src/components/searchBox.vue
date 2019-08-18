@@ -1,9 +1,72 @@
 <template>
-<div class="sinput search" style="height:25px;">
-    <input style="width:100%; background:transparent; border:none; outline:none; box-shadow:none;" v-model="content" ref="input" @keyup="Enter"/>
+<div class="search-box">
+    <input v-model="content" ref="input" @keyup="Enter"/>
     <p class="search-icon" :style="xIconColor" @mousedown="Clicked" @mouseup="ClickedUp" ref="icon">{{xIcon}}</p>
 </div>
 </template>
+
+<style lang="scss" scoped>
+.search-box
+{
+    width: auto;
+    height: 25px;
+    border: rgba(36, 36, 36, 0.3) solid 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: all 0.3s;
+
+    &:hover {
+        border-color: rgba(36, 36, 36, 0.6);
+    }
+
+    &:active {
+        border-color: rgba(36, 36, 36, 0.3);
+    }
+
+    &:focus {
+        border-color: rgba(26, 124, 170, 1);
+    }
+
+    input
+    {
+        width: 100%;
+        padding-left: 5px;
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .search-icon
+    {
+        height: 100%;
+        padding: 5px;
+        font-family: 'Segoe MDL2';
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+
+        &:hover
+        {
+            color: rgba(35,161,193,1.00);
+        }
+
+        &:active
+        {
+            background: rgba(26, 124, 170, 1);
+            color: rgba(242,242,242,1);
+        }
+    }
+}
+</style>
+
 
 <script>
 import $ from '../js/jquery-3.2.1.min.js';

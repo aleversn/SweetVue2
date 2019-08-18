@@ -1,5 +1,5 @@
 import $ from './js/jquery-3.2.1.min.js';
-import './css/sweet.css';
+import '@/css/sweet.css';
 
 import Vuex from 'vuex';
 
@@ -21,6 +21,7 @@ import scrollReveal from './components/scrollReveal.vue';
 import flyout from './components/flyout.vue';
 import pivot from './components/pivot.vue';
 import imgbox from './components/imgBox.vue';
+import autoSuggestBox from './components/autoSuggestBox.vue';
 
 import fluentProgressBar from './components/fluentProgressBar.vue';
 
@@ -80,6 +81,7 @@ SweetVue.install = function(Vue, options) {
     Vue.component(flyout.name,flyout);
     Vue.component(pivot.name,pivot);
     Vue.component(imgbox.name,imgbox);
+    Vue.component(autoSuggestBox.name,autoSuggestBox);
 
     Vue.component(fluentProgressBar.name,fluentProgressBar);
 }
@@ -304,7 +306,7 @@ class Sweet{
         if($("#s_info_box").length<=0)
         {
             $(document.body).append(`
-            <div id="s_info_box" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; background: rgba(255,255,255,0.5); -webkit-backdrop-filter:blur(15px); display: flex; justify-content: center; align-items: center; z-index:2001;">
+            <div id="s_info_box" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; background: rgba(255,255,255,0.5); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); display: flex; justify-content: center; align-items: center; z-index:2001;">
                 <div class="sinfo-box" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; z-index:2001;">
                     <div class="title-bar">
                         <i id="s_info_icon" style="font-family: Segoe MDL2; color: rgba(255,255,255,1); font-style: normal; text-align: center;">&#xE783;</i>
@@ -365,7 +367,7 @@ class Sweet{
         if($("#s_judge_box").length<=0)
         {
             $(document.body).append(`
-            <div id="s_judge_box" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; background: rgba(255,255,255,0.5); -webkit-backdrop-filter:blur(15px); display: flex; justify-content: center; align-items: center; z-index:2001;">
+            <div id="s_judge_box" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; background: rgba(255,255,255,0.5); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); display: flex; justify-content: center; align-items: center; z-index:2001;">
                     <div  class="sinfo-box" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; z-index:2001;">
                         <div class="title-bar">
                             <i id="s_judge_icon" style="font-family: Segoe MDL2; color: rgba(255,255,255,1); font-style: normal; text-align: center;">&#xE783;</i>
@@ -428,6 +430,12 @@ class Sweet{
     static get MousePositionVisual()
     {
         return Sweet.sMousePositionWithOutScroller;
+    }
+    static ScrollToLoadInit(e, callback = null, offset = 0) {
+        e.addEventListener("scroll", (event) => {
+            if (e.scrollTop + offset >= e.scrollHeight - e.clientHeight)
+                callback();
+        });
     }
 }
 

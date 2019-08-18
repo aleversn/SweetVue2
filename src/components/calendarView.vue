@@ -200,6 +200,23 @@ import '../css/sweet.css';
 
 export default {
     name: 'calendar-view',
+    props: {
+        xTheme: {
+            default: 'light'
+        },
+        xThemeColor: {
+            default: ''
+        }
+    },
+    watch: {
+        xTheme (val) {
+            if(val == 'dark')
+                this.theme = true;
+        },
+        xThemeColor (val) {
+            this.themeColor = val;
+        }
+    },
     data: function(){
         return {
             status: 2,
@@ -224,13 +241,10 @@ export default {
         }
     },
     mounted: function(){
-        let el = this.$el;
-        if($(el).attr("xTheme")=="dark"){
+        if(this.xTheme == "dark"){
             this.theme = true;
         }
-        if($(el).attr("xThemeColor")!=undefined){
-            this.themeColor = $(el).attr("xThemeColor");
-        }
+        this.themeColor = this.xThemeColor;
         this.updateRing();
         this.updateDays();
     },

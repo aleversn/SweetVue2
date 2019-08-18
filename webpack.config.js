@@ -53,7 +53,9 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.esm.js'
+            'vue$': 'vue/dist/vue.esm.js',
+            '@': path.join(__dirname, './src'),
+            '~': path.join(__dirname, './')
         },
         extensions: ['*', '.js', '.vue', '.json']
     },
@@ -65,7 +67,7 @@ module.exports = {
         hot:true,    //开启热更新，
         compress: true, // 服务器压缩式，一般为`true`，
         inline: true, // 默认为true,在打包时会注入一段代码到最后的js中，用来监视页面的改动而自动刷新页面
-        publicPath: 'dist/' //它与out.publicPath的值是一样的，值为上面contentBase目录的子目录
+        publicPath: '/dist/' //它与out.publicPath的值是一样的，值为上面contentBase目录的子目录
     },
     performance: {
         hints: false
@@ -73,9 +75,9 @@ module.exports = {
     output: {
         path: path.join(__dirname, bundleOutputDir),
         filename: 'SweetVue.min.js',
-        publicPath: 'dist/'
+        publicPath: '/dist/'
     },
-    devtool: '#eval-source-map'
+    // devtool: '#eval-source-map'
 }
 
 if (process.env.NODE_ENV === 'production') {
