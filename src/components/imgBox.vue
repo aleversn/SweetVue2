@@ -1,7 +1,7 @@
 <template>
 <div class="imgBox" :style="{background:onbackground?'url('+imgUri.data+') no-repeat':''}">
     <div v-show="imgUri.state!='done'" class="content">
-        <progress-bar v-show="imgUri.state=='none'" xLoading="true" style="width: 100%;"></progress-bar>
+        <progress-bar v-show="imgUri.state=='none'" :loading="true" style="width: 100%;"></progress-bar>
         <progress-ring v-show="imgUri.state=='loading'"></progress-ring>
     </div>
     <transition name="fade-in">
