@@ -3,7 +3,7 @@
     <div class="checkbox-rec">
         <p class="border" :class="{check: isCheck,dark: theme == 'dark'}"></p>
         <transition name="font-scale-in">
-            <p v-show="isCheck" class="content" :style="{background: isCheck ? checkBackground : ''}">&#xE10B;</p>
+            <p v-show="isCheck" class="checkbox-content" :style="{background: isCheck ? checkBackground : ''}">&#xE10B;</p>
         </transition>
     </div>
     <p style="margin-left: 5px;">{{xContent}}</p>
@@ -46,7 +46,7 @@
         }
     }
 
-    .content
+    .checkbox-content
     {
         position: absolute;
         width: 100%;
@@ -103,7 +103,7 @@ export default {
         }
     },
     data: function(){
-        return {isCheck:false, xContent:""};
+        return { isCheck:false, xContent:"" };
     },
     watch: {
         setStatus () {

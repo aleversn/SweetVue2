@@ -12,9 +12,8 @@
 .s-search-box
 {
     position: relative;
-    width: auto;
+    width: 200px;
     height: 30px;
-    border: rgba(36, 36, 36, 0.3) solid 2px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -22,35 +21,43 @@
     overflow: visible;
     transition: all 0.3s;
 
-    &:hover {
-        border-color: rgba(36, 36, 36, 0.6);
-    }
-
-    &:active {
-        border-color: rgba(36, 36, 36, 0.3);
-    }
-
-    &:focus {
-        border-color: rgba(26, 124, 170, 1);
-    }
-
     input
     {
+        position: absolute;
+        left: 0px;
+        top: 0px;
         width: 100%;
+        height: 100%;
         padding-left: 5px;
-        flex: 1;
         background: transparent;
-        border: none;
+        border: rgba(36, 36, 36, 0.3) solid 2px;
+        box-sizing: border-box;
         outline: none;
         box-shadow: none;
+        transition: all 0.3s;
+
+        &:hover {
+            border-color: rgba(36, 36, 36, 0.6);
+        }
+
+        &:active {
+            border-color: rgba(36, 36, 36, 0.3);
+        }
+
+        &:focus {
+            border-color: rgba(26, 124, 170, 0.8);
+        }
     }
 
     .search-icon
     {
+        position: absolute;
+        top: 0px;
+        right: 0px;
         height: 100%;
         padding: 5px;
         font-family: 'Segoe MDL2';
-        font-size: 13px;
+        box-sizing: border-box;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -209,7 +216,8 @@ export default {
             content: '',
             Suggest: [],
             lock: true,
-            showSuggest: false
+            showSuggest: false,
+            timer: {}
         }
     },
     watch: {
@@ -218,16 +226,10 @@ export default {
         },
         content (val) {
             this.$emit('update:value', val);
-            if(this.lock)
-            {
-                this.RefreshData(val);
-                this.showSuggest = true;
-            }
+            this.showSuggest = true;
         },
         suggest (val) {
             this.Suggest = JSON.parse(JSON.stringify(val));
-            if(this.lock)
-                this.RefreshData(this.content);
         }
     },
     computed: {
@@ -277,6 +279,10 @@ export default {
     mounted () {
         this.LazyLoadInit();
         this.outSideClick();
+        this.timer = setInterval(() => {
+            if(this.lock)
+                this.RefreshData(this.content);
+        }, 500);
     },
     methods: {
         LazyLoadInit () {
@@ -345,6 +351,9 @@ export default {
                 .toString(16)
                 .substring(1);
         }
+    },
+    beforeDestroy () {
+        clearInterval(this.timer);
     }
 }
 </script>

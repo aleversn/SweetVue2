@@ -8,9 +8,9 @@
 <style lang="scss" scoped>
 .search-box
 {
-    width: auto;
-    height: 25px;
-    border: rgba(36, 36, 36, 0.3) solid 2px;
+    position: relative;
+    width: 200px;
+    height: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -18,34 +18,43 @@
     overflow: hidden;
     transition: all 0.3s;
 
-    &:hover {
-        border-color: rgba(36, 36, 36, 0.6);
-    }
-
-    &:active {
-        border-color: rgba(36, 36, 36, 0.3);
-    }
-
-    &:focus {
-        border-color: rgba(26, 124, 170, 1);
-    }
-
     input
     {
+        position: absolute;
+        left: 0px;
+        top: 0px;
         width: 100%;
+        height: 100%;
         padding-left: 5px;
-        flex: 1;
         background: transparent;
-        border: none;
+        border: rgba(36, 36, 36, 0.3) solid 2px;
+        box-sizing: border-box;
         outline: none;
         box-shadow: none;
+        transition: all 0.3s;
+
+        &:hover {
+            border-color: rgba(36, 36, 36, 0.6);
+        }
+
+        &:active {
+            border-color: rgba(36, 36, 36, 0.3);
+        }
+
+        &:focus {
+            border-color: rgba(26, 124, 170, 0.8);
+        }
     }
 
     .search-icon
     {
+        position: absolute;
+        top: 0px;
+        right: 0px;
         height: 100%;
         padding: 5px;
         font-family: 'Segoe MDL2';
+        box-sizing: border-box;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -160,6 +169,7 @@ export default {
                 this.xIconColor.color = "rgba(36,36,36,1)";
         },
         Enter (event) {
+            this.$emit('keyup', $(this.$refs.input).val());
             if(event.keyCode == 13)
                 this.$emit('search', $(this.$refs.input).val());
         }
