@@ -247,6 +247,7 @@ export default {
             }
             this.now = this.items[this.currentIndexSafe].name;
         }
+        this.afterIndex(0);
         if(this.setindex != 0)
             this.afterIndex(this.setindex);
         this.outSideClick();

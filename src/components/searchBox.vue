@@ -96,18 +96,19 @@ export default {
             {
                 color:"rgba(36,36,36,1)"
             },
-            content:""
+            content:"",
+            timer: {}
         };
     },
     watch: {
         content (val) {
-            this.$emit('update:model',val);
+            this.SyncContentInit();
         },
         model (val) {
             this.content = val;
         }
     },
-    mounted:function(){
+    mounted () {
         let el = this.$el;
         let target = this;
         switch($(el).attr("xIcon"))
@@ -157,7 +158,13 @@ export default {
         }
         this.content = this.model;
     },
-    methods:{
+    methods: {
+        SyncContentInit () {
+            clearInterval(this.timer);
+            this.timer = setInterval(() => {
+                this.$emit('update:model', this.content);
+            }, 300);
+        },
         Clicked: function(){
             this.xIconColor.color = "rgba(242,242,242,1)";
             this.$emit('search', $(this.$refs.input).val());
